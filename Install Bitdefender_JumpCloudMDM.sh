@@ -12,25 +12,6 @@ if [ $count -gt 0 ]; then
     exit 0
 fi
 
-# Verify JumpCloud MDM
-verify_jc_mdm (){
-    # Check the system for the following profileIdentifier
-    mdmID="com.jumpcloud.mdm"
-    check=$(profiles -Lv | grep "name: $4" -4 | awk -F": " '/attribute: profileIdentifier/{print $NF}')
-    if [[ $check == *$mdmID* ]] ; then
-        echo "ProfileIdentifier: ${mdmID} found on system. MDM Verified"
-        return
-    else
-        echo "JumpCloud MDM profile not found on system."
-        false
-    fi
-}
-
-if ! verify_jc_mdm "$":; then
-    echo "Device is not yet supervised..."
-    exit 0
-fi
-
 # Locate DMG Download Link From URL
 regex='^https.*.dmg$'
 if [[ $DownloadUrl =~ $regex ]]; then
